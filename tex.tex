@@ -1,0 +1,1351 @@
+\documentclass[11pt,a4paper]{article}
+
+    \usepackage[breakable]{tcolorbox}
+     \linespread{1.15}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    
+    %preamble
+\usepackage[nottoc]{tocbibind}
+
+    \usepackage{titlesec}
+\titleformat{\section}{\normalfont\Large\bfseries}{\thesection}{1em}{}
+
+	
+    \usepackage{iftex}
+    \ifPDFTeX
+    	\usepackage[T1]{fontenc}
+    	\usepackage{mathpazo}
+    \else
+    	\usepackage{fontspec}
+    \fi
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range
+    \makeatletter % fix for old versions of grffile with XeLaTeX
+    \@ifpackagelater{grffile}{2019/11/01}
+    {
+      % Do nothing on new versions
+    }
+    {
+      \def\Gread@@xetex#1{%
+        \IfFileExists{"\Gin@base".bb}%
+        {\Gread@eps{\Gin@base.bb}}%
+        {\Gread@@xetex@aux#1}%
+      }
+    }
+    \makeatother
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % common color for the border for error outputs.
+    \definecolor{outerrorbackground}{HTML}{FFDFDF}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{Exam  1}
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\@namedef{PY@tok@w}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\@namedef{PY@tok@c}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cp}{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\@namedef{PY@tok@k}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kt}{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\@namedef{PY@tok@o}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ow}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@nb}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nf}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@ne}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\@namedef{PY@tok@nv}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@no}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\@namedef{PY@tok@nl}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\@namedef{PY@tok@ni}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\@namedef{PY@tok@na}{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\@namedef{PY@tok@nt}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nd}{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@s}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sd}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@si}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\@namedef{PY@tok@se}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\@namedef{PY@tok@sr}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\@namedef{PY@tok@ss}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sx}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@m}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@gh}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gu}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gd}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\@namedef{PY@tok@gi}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\@namedef{PY@tok@gr}{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\@namedef{PY@tok@ge}{\let\PY@it=\textit}
+\@namedef{PY@tok@gs}{\let\PY@bf=\textbf}
+\@namedef{PY@tok@gp}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@go}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\@namedef{PY@tok@gt}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\@namedef{PY@tok@err}{\def\PY@bc##1{{\setlength{\fboxsep}{\string -\fboxrule}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}}
+\@namedef{PY@tok@kc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kd}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kr}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@bp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@fm}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@vc}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vg}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vi}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vm}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sa}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sb}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sc}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@dl}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s2}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sh}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s1}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@mb}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mf}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mh}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mi}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@il}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mo}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ch}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cm}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cpf}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@c1}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\@namedef{PY@tok@cs}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb. 
+    \makeatletter
+        \newbox\Wrappedcontinuationbox 
+        \newbox\Wrappedvisiblespacebox 
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}} 
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}} 
+        \newcommand*\Wrappedcontinuationindent {3ex } 
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox} 
+        % Take advantage of the already applied Pygments mark-up to insert 
+        % potential linebreaks for TeX processing. 
+        %        {, <, #, %, $, ' and ": go to next line. 
+        %        _, }, ^, &, >, - and ~: stay at end of broken line. 
+        % Use of \textquotesingle for straight quote. 
+        \newcommand*\Wrappedbreaksatspecials {% 
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}% 
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}% 
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}% 
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}% 
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}% 
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}% 
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}% 
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}% 
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}% 
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}% 
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}% 
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}% 
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}% 
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}% 
+        } 
+        % Some characters . , ; ? ! / are not pygmentized. 
+        % This macro makes them "active" and they will insert potential linebreaks 
+        \newcommand*\Wrappedbreaksatpunct {% 
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}% 
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}% 
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}% 
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}% 
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}% 
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}% 
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}% 
+            \catcode`\.\active
+            \catcode`\,\active 
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active 
+            \lccode`\~`\~ 	
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+        
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active 	
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+    
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+
+  \begin{titlepage}
+  
+\begin{figure}[!htb]
+   \begin{minipage}{0.3\textwidth}
+     \centering
+     \includegraphics[width=1\linewidth]{Univ_Ouaga_logo.png}
+   \end{minipage}\hfill
+   \begin{minipage}{0.3\textwidth}
+     \centering
+     \includegraphics[width=0.9\linewidth]{Wascal_Logo.png}
+   \end{minipage}
+   \begin{minipage}{0.3\textwidth}
+     \centering
+     \includegraphics[width=1\linewidth]{almand.jpg}
+   \end{minipage}
+\end{figure}
+  \vspace{3cm}
+  
+\centering
+{\LARGE\bfseries SPATIAL DATA ANALYSIS \\}
+
+\vspace{1cm}
+
+{\Large Pratical Work}
+
+\vspace{1cm}
+\begin{flushleft}
+By: \\
+\vspace{0.2cm}
+{\large\bfseries DOUMBIA Abdramane}
+\end{flushleft}
+ 
+\begin{flushright}
+	Lecturers : \\
+	\vspace{0.2cm}
+	\large\bfseries Dr. Sarah Schönbrodt-Stitt \\
+	Steven Hill
+\end{flushright}
+
+\vspace{2cm}
+
+{\bfseries Informatics for Climate Change }
+\vspace{1cm}
+
+
+{\itshape University of Ouagadougou Joseph Ki-Zerbo} \\
+\vspace{1cm}
+\today
+\end{titlepage} 
+
+
+
+{
+\hypersetup{linkcolor=black}
+\tableofcontents
+
+}
+{
+\hypersetup{linkcolor=black}
+\newpage      
+\listoffigures
+}
+\newpage
+  
+  
+\section *{Introduction}
+ Climate data analysis is the most fundamental step in predicting the
+climate change. Its main objective is to increase understanding of the
+atmosphere and its interaction with the oceans, cry sphere and the land
+surface, through various types of approaches or techniques. They are
+empirical studies conducted on the climate data, diagnostic analyses and
+mathematical data modeling.
+
+At the end of the lecture ``Spatial data analysis'', it has been given a
+practical work of on the lecture. This paper report the answere to the
+questions asked in the practical work. The paper is divided in 4 parts
+which are : introduction, exercise 1, exercise 2 and conclusion.
+
+The data used for processing are : fire datasets : fires.csv and the
+elevation datasets: bfa\_elevation. The tool used to compute is python specifically Juputer Notebook.
+For the purpose of the analysis, many modules has been downloaded and
+imported. For the report, we used Latex.
+ 
+\section {Exercise 1}
+
+    \hypertarget{import-the-dataset-fires.csv}{%
+\subsection{}
+\subsubsection {Import the dataset
+(fires.csv)}\label{import-the-dataset-fires.csv}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
+\PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+\PY{k+kn}{import} \PY{n+nn}{cartopy}\PY{n+nn}{.}\PY{n+nn}{crs} \PY{k}{as} \PY{n+nn}{ccrs}
+\PY{k+kn}{import} \PY{n+nn}{cartopy}
+\PY{k+kn}{import} \PY{n+nn}{cartopy}\PY{n+nn}{.}\PY{n+nn}{feature} \PY{k}{as} \PY{n+nn}{cf}
+\PY{k+kn}{import} \PY{n+nn}{geopandas} \PY{k}{as} \PY{n+nn}{gpd}
+\PY{k+kn}{import} \PY{n+nn}{folium}
+\PY{k+kn}{import} \PY{n+nn}{geopatra}
+\PY{k+kn}{import} \PY{n+nn}{seaborn} \PY{k}{as} \PY{n+nn}{sns}
+\PY{k+kn}{import} \PY{n+nn}{contextily}
+\PY{k+kn}{import} \PY{n+nn}{geoplot}
+\PY{k+kn}{import} \PY{n+nn}{cartopy}\PY{n+nn}{.}\PY{n+nn}{crs} \PY{k}{as} \PY{n+nn}{ccrs}
+\PY{k+kn}{import} \PY{n+nn}{cartopy}
+\PY{k+kn}{import} \PY{n+nn}{cartopy}\PY{n+nn}{.}\PY{n+nn}{feature} \PY{k}{as} \PY{n+nn}{cf}
+\PY{k+kn}{import} \PY{n+nn}{geopandas} \PY{k}{as} \PY{n+nn}{gpd}
+\PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{style}
+\PY{k+kn}{import} \PY{n+nn}{matplotlib} \PY{k}{as} \PY{n+nn}{mpl}
+\PY{k+kn}{import} \PY{n+nn}{rasterio}
+\PY{n}{mpl}\PY{o}{.}\PY{n}{style}\PY{o}{.}\PY{n}{use}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{default}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{fire}\PY{o}{=}\PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{../SpatialAnalysis2021/Data/non\PYZhy{}spatial/fire/fire.csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{how-many-fires-were-detected-in-total}{%
+\subsubsection{How many fires were detected in
+total?}\label{how-many-fires-were-detected-in-total}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{nf}\PY{o}{=}\PY{n}{fire}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Number of fire detected: }\PY{l+s+si}{\PYZob{}}\PY{n}{nf}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Number of fire detected: 21460
+    \end{Verbatim}
+
+    \hypertarget{during-which-time-period-were-the-fires-detected}{%
+\subsection{During which time period were the fires
+detected?}\label{during-which-time-period-were-the-fires-detected}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{fire}\PY{o}{.}\PY{n}{ACQ\PYZus{}DATE}\PY{o}{=}\PY{n}{pd}\PY{o}{.}\PY{n}{to\PYZus{}datetime}\PY{p}{(}\PY{n}{fire}\PY{o}{.}\PY{n}{ACQ\PYZus{}DATE}\PY{p}{)}
+\PY{n}{start}\PY{o}{=}\PY{n}{fire}\PY{o}{.}\PY{n}{ACQ\PYZus{}DATE}\PY{o}{.}\PY{n}{min}\PY{p}{(}\PY{p}{)}
+\PY{n}{end}\PY{o}{=}\PY{n}{fire}\PY{o}{.}\PY{n}{ACQ\PYZus{}DATE}\PY{o}{.}\PY{n}{max}\PY{p}{(}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{The fires has been detected between }\PY{l+s+si}{\PYZob{}}\PY{n}{start}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{ and }\PY{l+s+si}{\PYZob{}}\PY{n}{end}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+The fires has been detected between 2019-01-01 00:00:00 and 2019-01-31 00:00:00
+    \end{Verbatim}
+
+    \hypertarget{identify-the-ten-brightest-fires-during-this-period.-where-are-they-located}{%
+\subsection{}
+\subsubsection{Identification of the ten brightest fires during this period
+located?}\label{identify-the-ten-brightest-fires-during-this-period.-where-are-they-located}}
+
+    The attribute which shows the brightness in the datasets is BRIGHTNESS.
+For the computation, we sort the values in the datasets based on that
+attribute in order to have the ten brightest observation. The data has
+been sorted by descending values. The next table shows the ten brightest
+fires occurred in the period of 2019-01-01 00:00:00 and 2019-01-31
+00:00:00.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ten\PYZus{}brigh} \PY{o}{=} \PY{n}{fire}\PY{o}{.}\PY{n}{sort\PYZus{}values}\PY{p}{(}\PY{n}{by}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{BRIGHTNESS}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{ascending}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{)}
+\PY{n}{ten\PYZus{}brigh}\PY{o}{=}\PY{n}{gpd}\PY{o}{.}\PY{n}{GeoDataFrame}\PY{p}{(}\PY{n}{ten\PYZus{}brigh}\PY{p}{,} \PY{n}{geometry}\PY{o}{=}\PY{n}{gpd}\PY{o}{.}\PY{n}{points\PYZus{}from\PYZus{}xy}\PY{p}{(}\PY{n}{ten\PYZus{}brigh}\PY{o}{.}\PY{n}{LONGITUDE}\PY{p}{,} \PY{n}{ten\PYZus{}brigh}\PY{o}{.}\PY{n}{LATITUDE}\PY{p}{)}\PY{p}{)}
+\PY{n}{ten\PYZus{}brigh}\PY{o}{=} \PY{n}{ten\PYZus{}brigh}\PY{o}{.}\PY{n}{reset\PYZus{}index}\PY{p}{(}\PY{p}{)}
+\PY{n}{ten\PYZus{}brigh}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+   index  LATITUDE  LONGITUDE  BRIGHTNESS  SCAN  TRACK   ACQ\_DATE  ACQ\_TIME  \textbackslash{}
+0  11427    9.6760    10.6130       422.9   1.0    1.0 2019-01-15      1244
+1   3495   10.5655     6.7566       421.8   1.0    1.0 2019-01-04      1303
+2  21228    8.1329    11.1870       419.7   1.0    1.0 2019-01-31      1244
+3   3319    7.6403     8.1262       418.0   1.0    1.0 2019-01-04      1302
+4  17854   12.4460     5.7779       413.4   1.1    1.0 2019-01-27      1006
+5   3346    7.6324     8.3984       405.4   1.0    1.0 2019-01-04      1302
+6   8828    8.6089    10.5270       399.9   1.7    1.3 2019-01-11      1308
+7  11430    9.6863    10.6208       397.0   1.0    1.0 2019-01-15      1244
+8  21012   11.3494    13.5145       396.7   1.2    1.1 2019-01-31      1244
+9  10353   10.0935     3.8743       395.2   1.5    1.2 2019-01-13      1257
+
+  SATELLITE INSTRUMENT  CONFIDENCE  VERSION  BRIGHT\_T31    FRP DAYNIGHT  TYPE  \textbackslash{}
+0      Aqua      MODIS         100     6.03       319.8  413.7        D     0
+1      Aqua      MODIS         100     6.03       320.2  395.6        D     0
+2      Aqua      MODIS         100     6.03       322.7  381.0        D     0
+3      Aqua      MODIS         100     6.03       317.6  375.0        D     0
+4     Terra      MODIS         100     6.03       320.7  382.8        D     0
+5      Aqua      MODIS         100     6.03       314.2  287.7        D     0
+6      Aqua      MODIS         100     6.03       316.3  526.0        D     0
+7      Aqua      MODIS         100     6.03       313.1  223.3        D     0
+8      Aqua      MODIS         100     6.03       315.5  271.1        D     0
+9      Aqua      MODIS         100     6.03       318.3  380.8        D     0
+
+                    geometry
+0   POINT (10.61300 9.67600)
+1   POINT (6.75660 10.56550)
+2   POINT (11.18700 8.13290)
+3    POINT (8.12620 7.64030)
+4   POINT (5.77790 12.44600)
+5    POINT (8.39840 7.63240)
+6   POINT (10.52700 8.60890)
+7   POINT (10.62080 9.68630)
+8  POINT (13.51450 11.34940)
+9   POINT (3.87430 10.09350)
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{the-location-of-ten-brightest-fires-during-this-period-2019-01-01-000000-and-2019-01-31-000000}{%
+\subsubsection{The location of ten brightest fires during this
+period 2019-01-01 00:00:00 and 2019-01-31
+00:00:00}\label{the-location-of-ten-brightest-fires-during-this-period-2019-01-01-000000-and-2019-01-31-000000}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{11}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{world}\PY{o}{=}\PY{n}{gpd}\PY{o}{.}\PY{n}{read\PYZus{}file}\PY{p}{(} \PY{n}{gpd}\PY{o}{.}\PY{n}{datasets}\PY{o}{.}\PY{n}{get\PYZus{}path}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{naturalearth\PYZus{}lowres}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
+\PY{n}{nigeria}\PY{o}{=}\PY{n}{world}\PY{p}{[}\PY{n}{world}\PY{o}{.}\PY{n}{name}\PY{o}{==}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Nigeria}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+\PY{n}{fig}\PY{p}{,} \PY{n}{ax}\PY{o}{=}\PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{)}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{scatter}\PY{p}{(}\PY{n}{ten\PYZus{}brigh}\PY{o}{.}\PY{n}{LONGITUDE}\PY{p}{,} \PY{n}{ten\PYZus{}brigh}\PY{o}{.}\PY{n}{LATITUDE}\PY{p}{,} \PY{n}{s}\PY{o}{=}\PY{l+m+mi}{200}\PY{p}{,} \PY{n}{c}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{r}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{alpha}\PY{o}{=}\PY{l+m+mf}{0.5}\PY{p}{)}
+\PY{n}{contextily}\PY{o}{.}\PY{n}{add\PYZus{}basemap}\PY{p}{(}\PY{n}{ax}\PY{p}{,} \PY{n}{crs}\PY{o}{=}\PY{n}{nigeria}\PY{o}{.}\PY{n}{crs}\PY{p}{,}
+    \PY{n}{source}\PY{o}{=}\PY{n}{contextily}\PY{o}{.}\PY{n}{providers}\PY{o}{.}\PY{n}{OpenStreetMap}\PY{o}{.}\PY{n}{Mapnik}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Ten Brightest fires}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{size}\PY{o}{=}\PY{l+m+mi}{17}\PY{p}{,} \PY{n}{weight}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bold}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{margins}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{margins}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{tight\PYZus{}layout}\PY{p}{(}\PY{p}{)} 
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+  
+    \begin{figure}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_13_0.png}
+    \caption{Ten Brighest fires}
+    \label{fig:1}
+    \end{figure}
+   
+ 
+    The above figure shows the ten brightest fires located in Nigeria. We
+can see form the graph that, the fire along the country. Two brightest
+fires can see in the same location around(longitude=10 and latitude
+=10).
+\subsection{}
+    \hypertarget{extract-all-fires-detected-with-a-confidence-higher-than-70-percent.-how-much-are-these}{%
+\subsubsection{ Extract all fires detected with a confidence
+higher than 70 percent. How much are
+these?}\label{extract-all-fires-detected-with-a-confidence-higher-than-70-percent.-how-much-are-these}}
+
+    The confidence of the fire has been tracked by the attribute \textbf{CONFIDENCE}.
+The condition has been set to that attribute to select the fire with
+confidence higher than 70.
+
+The number of fire with confidence higher than 70 is shown in the table
+above. The bold column title ``CONFIDENCE'' is the attribute which
+indicates the confidence of the fire. The first column indicating the
+index from the original datasets.\\
+In sum the number of fire with confidence higher than 70 percent is :
+7285. The distribution of those fire along the space can be see in the
+next graph.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{12}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{conf\PYZus{}70}\PY{o}{=}\PY{n}{fire}\PY{p}{[}\PY{n}{fire}\PY{o}{.}\PY{n}{CONFIDENCE}\PY{o}{\PYZgt{}}\PY{l+m+mi}{70}\PY{p}{]}
+\PY{n}{conf\PYZus{}70\PYZus{}nb}\PY{o}{=}\PY{n}{conf\PYZus{}70}\PY{o}{.}\PY{n}{count}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{conf\PYZus{}70}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{The numbe of fires with confidence higher than 70 percent is : }\PY{l+s+si}{\PYZob{}}\PY{n}{conf\PYZus{}70\PYZus{}nb}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+       LATITUDE  LONGITUDE  BRIGHTNESS  SCAN  TRACK   ACQ\_DATE  ACQ\_TIME  \textbackslash{}
+5        5.5644     5.7226       307.7   2.6    1.5 2019-01-01       144
+7       12.2363    14.4138       331.5   1.2    1.1 2019-01-01       929
+8       12.2348    14.4245       326.7   1.2    1.1 2019-01-01       929
+10      12.2743    14.3043       324.3   1.2    1.1 2019-01-01       929
+11      12.2660    14.2921       367.3   1.2    1.1 2019-01-01       929
+{\ldots}         {\ldots}        {\ldots}         {\ldots}   {\ldots}    {\ldots}        {\ldots}       {\ldots}
+21450   11.4083     5.7974       307.7   1.2    1.1 2019-01-31      2210
+21452   10.8918     5.7326       309.5   1.1    1.1 2019-01-31      2210
+21454   10.9928     4.8431       308.2   1.0    1.0 2019-01-31      2210
+21457   11.4788     6.7811       343.6   1.3    1.1 2019-01-31      2210
+21458   11.4804     6.7929       323.9   1.3    1.1 2019-01-31      2210
+
+      SATELLITE INSTRUMENT  CONFIDENCE  VERSION  BRIGHT\_T31    FRP DAYNIGHT  \textbackslash{}
+5          Aqua      MODIS          72     6.03       292.5   31.6        N
+7         Terra      MODIS          81     6.03       305.9   26.4        D
+8         Terra      MODIS          75     6.03       306.0   18.9        D
+10        Terra      MODIS          71     6.03       305.2   16.2        D
+11        Terra      MODIS         100     6.03       305.5  124.4        D
+{\ldots}         {\ldots}        {\ldots}         {\ldots}      {\ldots}         {\ldots}    {\ldots}      {\ldots}
+21450     Terra      MODIS          72     6.03       291.9   10.1        N
+21452     Terra      MODIS          77     6.03       293.7   10.5        N
+21454     Terra      MODIS          74     6.03       294.2    7.9        N
+21457     Terra      MODIS         100     6.03       295.2   71.5        N
+21458     Terra      MODIS         100     6.03       293.7   29.4        N
+
+
+The number of fires with confidence higher than 70 percent is : 7285
+    \end{Verbatim}
+
+    \hypertarget{the-locationfires-detected-with-a-confidence-higher-than-70-percent}{%
+\subsubsection{location of fires detected with a confidence higher
+than 70 
+percent }\label{the-locationfires-detected-with-a-confidence-higher-than-70-percent}} 
+    This figure shows the distribution of the fires higher than 70 percent.
+The fire with the confidence higher than 70 is distributed along the
+country Nigeria. We can see the confidence with hundred percent are not
+a lot. Most of the fire have the confidence from 70 to 85 percent.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{13}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{fig}\PY{p}{,} \PY{n}{ax}\PY{o}{=}\PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,}\PY{l+m+mi}{7}\PY{p}{)}\PY{p}{)}
+\PY{n}{gpd}\PY{o}{.}\PY{n}{GeoDataFrame}\PY{p}{(}\PY{n}{conf\PYZus{}70}\PY{p}{,} \PY{n}{geometry}\PY{o}{=}\PY{n}{gpd}\PY{o}{.}\PY{n}{points\PYZus{}from\PYZus{}xy}\PY{p}{(}\PY{n}{conf\PYZus{}70}\PY{o}{.}\PY{n}{LONGITUDE}\PY{p}{,}\PY{n}{conf\PYZus{}70}\PY{o}{.}\PY{n}{LATITUDE}\PY{p}{)}\PY{p}{)}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{column}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{CONFIDENCE}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{legend}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,} \PY{n}{cmap}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{RdYlBu\PYZus{}r}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{ax}\PY{o}{=}\PY{n}{ax}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{n}{xlabel}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Longitude(degree)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{size}\PY{o}{=}\PY{l+m+mi}{12}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{n}{ylabel}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Latitude (degreee)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{size}\PY{o}{=}\PY{l+m+mi}{12} \PY{p}{)}
+\PY{n}{contextily}\PY{o}{.}\PY{n}{add\PYZus{}basemap}\PY{p}{(}\PY{n}{ax}\PY{p}{,} \PY{n}{crs}\PY{o}{=}\PY{n}{nigeria}\PY{o}{.}\PY{n}{crs}\PY{p}{,}
+    \PY{n}{source}\PY{o}{=}\PY{n}{contextily}\PY{o}{.}\PY{n}{providers}\PY{o}{.}\PY{n}{OpenStreetMap}\PY{o}{.}\PY{n}{Mapnik}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Fires Confidence higher than 70}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{size}\PY{o}{=}\PY{l+m+mi}{17}\PY{p}{,} \PY{n}{weight}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bold}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{tight\PYZus{}layout}\PY{p}{(}\PY{p}{)} 
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{figure}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_20_0.png}
+    \caption{Fires with confidence higher than 70 percent}
+    \end{figure}
+    
+  
+    \hypertarget{create-a-histogram-showing-the-distribution-of-the-fire-radiative-power.-cleary-indicate-the-description-of-the-y-axis-and-x-axis.}{%
+\subsection{Creation of the histogram showing the distribution of the
+fire radiative power. Cleary indicate the description of the y-axis and
+x-axis.}\label{create-a-histogram-showing-the-distribution-of-the-fire-radiative-power.-cleary-indicate-the-description-of-the-y-axis-and-x-axis.}}
+
+    The radiative power of fire is observed through the attribute FRP of the
+datasets. This attribute stands for Force Radiative Power.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{14}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{fig}\PY{p}{,} \PY{n}{ax}\PY{o}{=}\PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}
+\PY{n}{sns}\PY{o}{.}\PY{n}{histplot}\PY{p}{(}\PY{n}{fire}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{FRP}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}\PY{n}{shrink}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{,}\PY{n}{ax}\PY{o}{=}\PY{n}{ax}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{n}{xlabel}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Fire Radiative Power}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{size}\PY{o}{=}\PY{l+m+mi}{12}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{n}{ylabel}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Count}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{size}\PY{o}{=}\PY{l+m+mi}{12} \PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Fire radiative power}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{size}\PY{o}{=}\PY{l+m+mi}{17}\PY{p}{,} \PY{n}{weight}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bold}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{figure}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_23_0.png}
+    \caption{Fire radiative power}
+    \end{figure}
+
+    The number of occurrence of the Fire Radiative Power is shown in the
+histogram above. The radiative power is in the range of 0 to 200. We can
+see, most of the fire has the radiative power in the range of 0 to 25. We deduct that there have not been more fire with highe radiative power.
+
+
+\subsection{}  
+    \hypertarget{create-a-plot-showing-the-numbers-of-fires-for-each-day.}{%
+\subsubsection{Creation of the plot showing the numbers of fires for each
+day.}\label{create-a-plot-showing-the-numbers-of-fires-for-each-day.}}
+
+    The above figure shows the occurrence of fires per day. We can from the
+figure, there have been more fire in 2019-01-04 specifically 1750 fires.
+The lowest value is show at the date 2019-01-28 specifically around 100
+occurrences.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{15}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{fire\PYZus{}day}\PY{o}{=}\PY{n}{fire}\PY{o}{.}\PY{n}{groupby}\PY{p}{(}\PY{n}{by}\PY{o}{=}\PY{n}{fire}\PY{o}{.}\PY{n}{ACQ\PYZus{}DATE}\PY{p}{)}\PY{o}{.}\PY{n}{count}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,}\PY{l+m+mi}{6}\PY{p}{)}\PY{p}{)}
+\PY{n}{ax} \PY{o}{=} \PY{n}{sns}\PY{o}{.}\PY{n}{barplot}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{n}{fire\PYZus{}day}\PY{o}{.}\PY{n}{index}\PY{p}{,}\PY{n}{y}\PY{o}{=}\PY{n}{fire\PYZus{}day}\PY{o}{.}\PY{n}{SCAN}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{n}{xlabel}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Date}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{size}\PY{o}{=}\PY{l+m+mi}{12}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{n}{ylabel}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Count}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{size}\PY{o}{=}\PY{l+m+mi}{12} \PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Occurence of fires per day}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{size}\PY{o}{=}\PY{l+m+mi}{17}\PY{p}{,} \PY{n}{weight}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bold}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}xticklabels}\PY{p}{(}\PY{n}{ax}\PY{o}{.}\PY{n}{get\PYZus{}xticklabels}\PY{p}{(}\PY{p}{)}\PY{p}{,} \PY{n}{rotation}\PY{o}{=}\PY{l+m+mi}{45}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{tight\PYZus{}layout}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{savefig}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Number of fire per day}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{bbox\PYZus{}inches}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{tight}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n+nb}{format}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{svg}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{figure}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_26_0.png}
+    \caption{Occurence of fires per day}
+    \end{figure}
+   
+    \hypertarget{convert-the-dataset-into-a-spatial-geopandas-dataframe.}{%
+\subsubsection{Convert the dataset into a spatial geopandas
+dataframe.}\label{convert-the-dataset-into-a-spatial-geopandas-dataframe.}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{16}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{fire\PYZus{}geo}\PY{o}{=}\PY{n}{gpd}\PY{o}{.}\PY{n}{GeoDataFrame}\PY{p}{(}\PY{n}{fire}\PY{p}{,} \PY{n}{geometry}\PY{o}{=}\PY{n}{gpd}\PY{o}{.}\PY{n}{points\PYZus{}from\PYZus{}xy}\PY{p}{(}\PY{n}{fire}\PY{o}{.}\PY{n}{LONGITUDE}\PY{p}{,} \PY{n}{fire}\PY{o}{.}\PY{n}{LATITUDE}\PY{p}{)}\PY{p}{)}
+\PY{n}{fig}\PY{p}{,} \PY{n}{ax}\PY{o}{=}\PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{15}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}
+\PY{n}{fire\PYZus{}geo}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{ax}\PY{o}{=}\PY{n}{ax}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{set}\PY{p}{(}\PY{n}{title}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Fires point pattern}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{xlabel}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Longitude (c)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{ylabel}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Latitude (c)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{figure}
+    \caption{Fires point pattern}
+    \adjustimage{max size={0.7\linewidth}{0.6\paperheight}}{output_28_0.png}
+    \end{figure}
+    
+    \hypertarget{create-a-heat-map-showing-the-density-of-fires-in-nigeria.}{%
+\subsection{Creation of the heat map showing the density of fires in
+Nigeria.}\label{create-a-heat-map-showing-the-density-of-fires-in-nigeria.}}
+
+    The density of fire is shown in the above figure. There four big block
+of fire in south east and north west of the country.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{17}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{fig}\PY{p}{,} \PY{n}{ax}\PY{o}{=}\PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{)}\PY{p}{)}
+\PY{n}{sns}\PY{o}{.}\PY{n}{kdeplot}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{n}{fire\PYZus{}geo}\PY{o}{.}\PY{n}{LONGITUDE}\PY{p}{,} \PY{n}{y}\PY{o}{=}\PY{n}{fire\PYZus{}geo}\PY{o}{.}\PY{n}{LATITUDE}\PY{p}{,}
+                \PY{n}{n\PYZus{}levels}\PY{o}{=}\PY{l+m+mi}{70}\PY{p}{,} \PY{n}{shade}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,}
+                \PY{n}{alpha}\PY{o}{=}\PY{l+m+mf}{0.55}\PY{p}{,} \PY{n}{cmap}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Reds}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{zorder}\PY{o}{=}\PY{l+m+mi}{100}\PY{p}{,} \PY{n}{ax}\PY{o}{=}\PY{n}{ax}\PY{p}{)}
+\PY{n}{contextily}\PY{o}{.}\PY{n}{add\PYZus{}basemap}\PY{p}{(}\PY{n}{ax}\PY{p}{,} \PY{n}{crs}\PY{o}{=}\PY{n}{nigeria}\PY{o}{.}\PY{n}{crs}\PY{p}{,}
+    \PY{n}{source}\PY{o}{=}\PY{n}{contextily}\PY{o}{.}\PY{n}{providers}\PY{o}{.}\PY{n}{OpenStreetMap}\PY{o}{.}\PY{n}{Mapnik}\PY{p}{)}
+
+\PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Density of fires in Nigeria}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{size}\PY{o}{=}\PY{l+m+mi}{17}\PY{p}{,} \PY{n}{weight}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bold}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{margins}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{margins}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{tight\PYZus{}layout}\PY{p}{(}\PY{p}{)} 
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{figure}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_31_0.png}
+    \caption{Density of fires in Nigeria}
+    \end{figure}
+   	\newpage
+    \hypertarget{investigate-if-the-fire-detected-in-nigeria-are-distributed-rather-regularclusteredif-so-to-identify-the-main-cluster-and-explain}{%
+\subsection{Investigate if the fire detected in Nigeria are
+distributed rather regular/clustered(if so to identify the main cluster
+and
+explain)}\label{investigate-if-the-fire-detected-in-nigeria-are-distributed-rather-regularclusteredif-so-to-identify-the-main-cluster-and-explain}}
+
+\paragraph{} As defined by Diggle (2006) Spatial Point Processes are stochastic
+mechanisms which generate a series of events across a region. The
+locations of the events generated by a point process are a point
+pattern. Spatial Point Processes are generally static, whereby the
+statistical parameters of the underlying process do not vary over space
+(invariant under translation), and isotropic, whereby that they exhibit
+the same value when measured from different directions (invariant under
+rotation). Clustered Patterns are more grouped than random patterns.
+Visually, we can observe more points at short distances. There are two
+sources of clustering.
+ 
+\paragraph{}In order to test either the point pattern are
+clustered or regular, we have used the G function to do the test. The G
+function is defined as follows: for a given distance d, G(d) is the
+proportion of nearest neighbor distances that are less than d. A
+Simulation envelope is a computer intensive technique for inferring
+whether an observed pattern significantly deviates from what would be
+expected under a specific process. Here, we always use CSR as the
+benchmark. In order to contruct a simulation envelope for a given function, we did a CSR simulation of 100 times.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{18}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{from} \PY{n+nn}{pointpats} \PY{k+kn}{import} \PY{n}{PointPattern}
+\PY{k+kn}{from} \PY{n+nn}{shapely}\PY{n+nn}{.}\PY{n+nn}{geometry} \PY{k+kn}{import} \PY{n}{Point}\PY{p}{,} \PY{n}{LineString}\PY{p}{,} \PY{n}{Polygon}
+\PY{k+kn}{import} \PY{n+nn}{pointpats}\PY{n+nn}{.}\PY{n+nn}{quadrat\PYZus{}statistics} \PY{k}{as} \PY{n+nn}{qs}
+\PY{k+kn}{from} \PY{n+nn}{pointpats}\PY{n+nn}{.}\PY{n+nn}{\PYZus{}deprecated\PYZus{}distance\PYZus{}statistics} \PY{k+kn}{import}  \PY{n}{K}\PY{p}{,}\PY{n}{L}\PY{p}{,}\PY{n}{G}\PY{p}{,}\PY{n}{F}\PY{p}{,} \PY{n}{Genv}\PY{p}{,} \PY{n}{Fenv}\PY{p}{,} \PY{n}{Jenv}\PY{p}{,} \PY{n}{Kenv}\PY{p}{,} \PY{n}{Lenv}
+\PY{k+kn}{from} \PY{n+nn}{pointpats} \PY{k+kn}{import} \PY{n}{PoissonPointProcess}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{19}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{}Create the point pattern from the data}
+\PY{n}{pp}\PY{o}{=}\PY{n}{PointPattern}\PY{p}{(}\PY{n}{fire\PYZus{}geo}\PY{p}{[}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{LONGITUDE}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{LATITUDE}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{]}\PY{p}{)}
+\PY{c+c1}{\PYZsh{}G function test}
+\PY{n}{g\PYZus{}test}\PY{o}{=}\PY{n}{G}\PY{p}{(}\PY{n}{pp}\PY{p}{,} \PY{n}{intervals}\PY{o}{=}\PY{l+m+mi}{60}\PY{p}{)}
+\PY{n}{realizations} \PY{o}{=} \PY{n}{PoissonPointProcess}\PY{p}{(}\PY{n}{pp}\PY{o}{.}\PY{n}{window}\PY{p}{,} \PY{n}{pp}\PY{o}{.}\PY{n}{n}\PY{p}{,} \PY{l+m+mi}{100}\PY{p}{,} \PY{n}{asPP}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)} \PY{c+c1}{\PYZsh{} simulate CSR 100 times}
+\PY{n}{genv} \PY{o}{=} \PY{n}{Genv}\PY{p}{(}\PY{n}{pp}\PY{p}{,} \PY{n}{intervals}\PY{o}{=}\PY{l+m+mi}{20}\PY{p}{,} \PY{n}{realizations}\PY{o}{=}\PY{n}{realizations}\PY{p}{)}  \PY{c+c1}{\PYZsh{}The same for other}
+\PY{c+c1}{\PYZsh{}The plotting}
+\PY{n}{f}\PY{p}{,} \PY{n}{ax}\PY{o}{=}\PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,}\PY{l+m+mi}{6}\PY{p}{)}\PY{p}{,} \PY{n}{gridspec\PYZus{}kw}\PY{o}{=}\PY{n+nb}{dict}\PY{p}{(}\PY{n}{width\PYZus{}ratios}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,}\PY{l+m+mi}{8}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{fill\PYZus{}between}\PY{p}{(}\PY{n}{genv}\PY{o}{.}\PY{n}{d}\PY{p}{,} \PY{n}{genv}\PY{o}{.}\PY{n}{low}\PY{p}{,} \PY{n}{genv}\PY{o}{.}\PY{n}{high}\PY{p}{,} \PY{n}{alpha}\PY{o}{=}\PY{l+m+mf}{.5}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{95}\PY{l+s+si}{\PYZpc{} o}\PY{l+s+s2}{f Simulations}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{genv}\PY{o}{.}\PY{n}{d}\PY{p}{,} \PY{n}{genv}\PY{o}{.}\PY{n}{mean}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{blue}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Mean of simulations}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{o}{*}\PY{n}{genv}\PY{o}{.}\PY{n}{observed}\PY{o}{.}\PY{n}{T}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Observed}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{red}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{set}\PY{p}{(}\PY{n}{xlabel}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{distance}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{ylabel}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+si}{\PYZpc{} o}\PY{l+s+s2}{f nearest neighnor}\PY{l+s+s2}{\PYZbs{}}\PY{l+s+s2}{distances shorter}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+\PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+sa}{r}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Ripley}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{s \PYZdl{}G(d) \PYZdl{} function}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{size}\PY{o}{=}\PY{l+m+mi}{17}\PY{p}{)}
+\PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{scatter}\PY{p}{(}\PY{n}{pp}\PY{o}{.}\PY{n}{df}\PY{o}{.}\PY{n}{x}\PY{p}{,} \PY{n}{pp}\PY{o}{.}\PY{n}{df}\PY{o}{.}\PY{n}{y}\PY{p}{)}
+\PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Pattern}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{size}\PY{o}{=}\PY{l+m+mi}{17}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{savefig}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{G compa 1}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n+nb}{format}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{svg}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{figure}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_35_0.png}
+    \caption{G function}
+    \end{figure}
+    It can be seen from the figure the G function curbe at the left figure
+increases rapidly at short distance. This mean that the average distance
+between point in the space is low. By then, the points are distributed
+clustered. By the then, the observed curbe (G function) is upon the mean
+of simulations.
+
+    \begin{itemize}
+\tightlist
+\item
+  Identificaiton of the clustered points
+\end{itemize}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{20}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{cluster} \PY{k+kn}{import} \PY{n}{dbscan}
+\PY{k+kn}{import} \PY{n+nn}{seaborn} \PY{k}{as} \PY{n+nn}{sns}
+\PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{cluster} \PY{k+kn}{import} \PY{n}{KMeans}
+\PY{n}{cs}\PY{p}{,} \PY{n}{lbls} \PY{o}{=} \PY{n}{dbscan}\PY{p}{(}\PY{n}{pp}\PY{o}{.}\PY{n}{df}\PY{p}{[}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{y}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}\PY{p}{)}
+\PY{n}{lbls} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{Series}\PY{p}{(}\PY{n}{lbls}\PY{p}{,} \PY{n}{index}\PY{o}{=}\PY{n}{pp}\PY{o}{.}\PY{n}{df}\PY{o}{.}\PY{n}{index}\PY{p}{)}
+\PY{c+c1}{\PYZsh{}Create 2 mains clustered point from the point patttern}
+\PY{n}{kmeans} \PY{o}{=} \PY{n}{KMeans}\PY{p}{(}\PY{n}{n\PYZus{}clusters}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{)}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{pp}\PY{o}{.}\PY{n}{df}\PY{p}{)}
+\PY{n}{k\PYZus{}value}\PY{o}{=}\PY{n}{kmeans}\PY{o}{.}\PY{n}{cluster\PYZus{}centers\PYZus{}}
+\PY{c+c1}{\PYZsh{}PLot the point pattern with the 2 main clustered point}
+\PY{n}{f}\PY{p}{,} \PY{n}{ax} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{7}\PY{p}{)}\PY{p}{)}
+\PY{n}{noise} \PY{o}{=} \PY{n}{pp}\PY{o}{.}\PY{n}{df}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{lbls}\PY{o}{==}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{y}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}
+\PY{n}{plt}\PY{o}{.}\PY{n}{scatter}\PY{p}{(}\PY{n}{noise}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{noise}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{y}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{c}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{grey}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{s}\PY{o}{=}\PY{l+m+mi}{5}\PY{p}{,} \PY{n}{linewidth}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{scatter}\PY{p}{(}\PY{n}{pp}\PY{o}{.}\PY{n}{df}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{pp}\PY{o}{.}\PY{n}{df}\PY{o}{.}\PY{n}{index}\PY{o}{.}\PY{n}{difference}\PY{p}{(}\PY{n}{noise}\PY{o}{.}\PY{n}{index}\PY{p}{)}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{x}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PYZbs{}
+           \PY{n}{pp}\PY{o}{.}\PY{n}{df}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{pp}\PY{o}{.}\PY{n}{df}\PY{o}{.}\PY{n}{index}\PY{o}{.}\PY{n}{difference}\PY{p}{(}\PY{n}{noise}\PY{o}{.}\PY{n}{index}\PY{p}{)}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{y}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PYZbs{}
+          \PY{n}{c}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{red}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{linewidth}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{scatter}\PY{p}{(}\PY{o}{*}\PY{n}{k\PYZus{}value}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{s}\PY{o}{=}\PY{l+m+mi}{200}\PY{p}{,} \PY{n}{c}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{g}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{marker}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{s}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Main clustering point}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{scatter}\PY{p}{(}\PY{o}{*}\PY{n}{k\PYZus{}value}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{n}{s}\PY{o}{=}\PY{l+m+mi}{200}\PY{p}{,} \PY{n}{c}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{y}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{marker}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{s}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Second clustering point}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{n}{title}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Two main Clustering point}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{n}{ylabel}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Latitude}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{n}{xlabel}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Longitude}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Clustering point}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{size}\PY{o}{=}\PY{l+m+mi}{17}\PY{p}{,} \PY{n}{weight}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bold}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{figure}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_38_0.png}
+    \caption{Main lustering points}
+    \end{figure}
+ 
+ The two howed in the figure represent the main clustering  point. The fires are clustered around two major points. 
+    \hypertarget{count-the-fires-occurring-in-the-different-local-government-areas-in-nigeria.-how-much-are-they}{%
+\subsection{Count the fires occurring in the different local
+government areas in Nigeria. How much are
+they?}\label{count-the-fires-occurring-in-the-different-local-government-areas-in-nigeria.-how-much-are-they}}
+
+    The number of fire in each different local government ares in Nigeria is
+computed using the file new\_lga\_nigeria\_2003.shp. The module of sjoin
+of the package geopandas has been used to join the two dataset by the
+method
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{21}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{}Load nigeria shape file}
+\PY{n}{nigeria\PYZus{}local} \PY{o}{=} \PY{n}{gpd}\PY{o}{.}\PY{n}{read\PYZus{}file}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{../last/SpatialAnalysis2021/Data/vector/fires/new\PYZus{}lga\PYZus{}nigeria\PYZus{}2003.shp}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{c+c1}{\PYZsh{} Do the spatial join of the fires datasets and the nigeria shape file}
+\PY{n}{fire\PYZus{}local}\PY{o}{=}\PY{n}{gpd}\PY{o}{.}\PY{n}{sjoin}\PY{p}{(}\PY{n}{nigeria\PYZus{}local}\PY{p}{,}\PY{n}{fire\PYZus{}geo}\PY{o}{.}\PY{n}{set\PYZus{}crs}\PY{p}{(}\PY{n}{nigeria\PYZus{}local}\PY{o}{.}\PY{n}{crs}\PY{p}{)}\PY{p}{)}
+\PY{c+c1}{\PYZsh{}Create a variable containing the values of local governement area in Nigeria shape file(count)}
+\PY{n}{y} \PY{o}{=} \PY{n}{fire\PYZus{}local}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LGA}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{n}{ascending}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\PY{c+c1}{\PYZsh{}Select the local governement area which has more than 200 fires to simplify the plotting}
+\PY{n}{y}\PY{o}{=}\PY{n}{y}\PY{p}{[}\PY{n}{y}\PY{o}{\PYZgt{}}\PY{l+m+mi}{200}\PY{p}{]}
+\PY{c+c1}{\PYZsh{}Plotting}
+\PY{n}{ax} \PY{o}{=} \PY{n}{y}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{kind}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{barh}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{8}\PY{p}{,} \PY{l+m+mi}{7}\PY{p}{)}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsh{}d84141}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{zorder}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{width}\PY{o}{=}\PY{l+m+mf}{0.85}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{spines}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{right}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}visible}\PY{p}{(}\PY{k+kc}{False}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{spines}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{top}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}visible}\PY{p}{(}\PY{k+kc}{False}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{spines}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{left}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}visible}\PY{p}{(}\PY{k+kc}{False}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{spines}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{bottom}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}visible}\PY{p}{(}\PY{k+kc}{False}\PY{p}{)}
+\PY{c+c1}{\PYZsh{} Set x\PYZhy{}axis label}
+\PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Number of fires}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{labelpad}\PY{o}{=}\PY{l+m+mi}{20}\PY{p}{,} \PY{n}{weight}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{bold}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{size}\PY{o}{=}\PY{l+m+mi}{12}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Number of fires occured in the different local government areas in Nigeria }\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{weight}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{bold}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{size}\PY{o}{=}\PY{l+m+mi}{15}\PY{p}{)}
+\PY{c+c1}{\PYZsh{} Set y\PYZhy{}axis label}
+\PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Local Governement City}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{weight}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{bold}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{size}\PY{o}{=}\PY{l+m+mi}{12}\PY{p}{)}
+\PY{k}{for} \PY{n}{i}\PY{p}{,} \PY{n}{v} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{y}\PY{p}{)}\PY{p}{:}
+    \PY{n}{ax}\PY{o}{.}\PY{n}{text}\PY{p}{(}\PY{n}{v} \PY{o}{+} \PY{l+m+mi}{10}\PY{p}{,} \PY{n}{i}\PY{p}{,} \PY{n+nb}{str}\PY{p}{(}\PY{n}{v}\PY{p}{)}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{black}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{10}\PY{p}{,} \PY{n}{ha}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{left}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{va}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{center}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}    
+\PY{n}{plt}\PY{o}{.}\PY{n}{margins}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{margins}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{tight\PYZus{}layout}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{figure}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_41_0.png}
+    \caption{Number of fires occured in the different local government areas in Nigeria}
+    \end{figure}
+    
+    The number of fire in different local region in Nigeria is showed in the
+figure above. The local region which has the most fire is Borou couting
+1003 followed by Brimin Gwari counting 878.
+
+    \hypertarget{create-a-map-displaying-the-number-of-fires-for-each-local-government-area.}{%
+\subsection{Create a map displaying the number of fires for each
+local government
+area.}\label{create-a-map-displaying-the-number-of-fires-for-each-local-government-area.}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{22}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{nigeria\PYZus{}local}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+\PY{n}{fire\PYZus{}local}\PY{o}{=}\PY{n}{gpd}\PY{o}{.}\PY{n}{sjoin}\PY{p}{(}\PY{n}{nigeria\PYZus{}local}\PY{p}{,}\PY{n}{fire\PYZus{}geo}\PY{o}{.}\PY{n}{set\PYZus{}crs}\PY{p}{(}\PY{n}{nigeria\PYZus{}local}\PY{o}{.}\PY{n}{crs}\PY{p}{)}\PY{p}{)}
+\PY{n}{y} \PY{o}{=} \PY{n}{fire\PYZus{}local}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LGA}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{n}{ascending}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\PY{n}{fire\PYZus{}local\PYZus{}geom\PYZus{}lga}\PY{o}{=} \PY{n}{fire\PYZus{}local}\PY{p}{[}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{LGA}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{geometry}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{]}
+
+\PY{n}{nb\PYZus{}fire\PYZus{}lga}\PY{o}{=} \PY{n}{y}\PY{o}{.}\PY{n}{to\PYZus{}frame}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{nfire}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{o}{.}\PY{n}{reset\PYZus{}index}\PY{p}{(}\PY{p}{)}
+\PY{n}{nb\PYZus{}fire\PYZus{}lga}\PY{o}{=}\PY{n}{nb\PYZus{}fire\PYZus{}lga}\PY{o}{.}\PY{n}{rename}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{index}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{LGA}\PY{l+s+s2}{\PYZdq{}}\PY{p}{\PYZcb{}}\PY{p}{)}
+\PY{n}{fire\PYZus{}loc\PYZus{}nb}\PY{o}{=}\PY{n}{fire\PYZus{}local\PYZus{}geom\PYZus{}lga}\PY{o}{.}\PY{n}{merge}\PY{p}{(}\PY{n}{nb\PYZus{}fire\PYZus{}lga}\PY{p}{,} \PY{n}{on}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{LGA}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+We first pick the the fire occured only in nigeria. We then select the column LGA abd "geometry" from the geodatframe to facilitate the operation.
+We transform the variable containing the number of fire of each region(calculated above) to a data frame and rename the name of the column containing the cities to "LGA".
+
+At this step, both the data of fire in Nigeria and the data number of fire of each region contains the column "LGA". We then merge them using based on that column.
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{23}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{fig}\PY{p}{,} \PY{n}{ax}\PY{o}{=}\PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,}\PY{l+m+mi}{6}\PY{p}{)}\PY{p}{)}
+\PY{n}{fire\PYZus{}loc\PYZus{}nb}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{column}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{nfire}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{legend}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,} \PY{n}{cmap}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{RdYlBu\PYZus{}r}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{n}{ax}\PY{o}{=}\PY{n}{ax}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Number of fires in for each location in Nigeria}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{size}\PY{o}{=}\PY{l+m+mi}{17}\PY{p}{,} \PY{n}{weight}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bold}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{n}{xlabel}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Longitude (c)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{size}\PY{o}{=}\PY{l+m+mi}{12}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{n}{ylabel}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Latitude (c)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{size}\PY{o}{=}\PY{l+m+mi}{12}\PY{p}{)}
+\PY{n}{contextily}\PY{o}{.}\PY{n}{add\PYZus{}basemap}\PY{p}{(}\PY{n}{ax}\PY{p}{,} \PY{n}{crs}\PY{o}{=}\PY{n}{nigeria}\PY{o}{.}\PY{n}{crs}\PY{p}{,}
+    \PY{n}{source}\PY{o}{=}\PY{n}{contextily}\PY{o}{.}\PY{n}{providers}\PY{o}{.}\PY{n}{OpenStreetMap}\PY{o}{.}\PY{n}{Mapnik}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{tight\PYZus{}layout}\PY{p}{(}\PY{p}{)} 
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{figure}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_46_0.png}
+    \caption{Number of fires for Local Administrative Area in Nigeia}
+    \end{figure}
+  
+    
+    The figure shows the number of fires in each location of Nigeria. We can
+see the Norht West part of Nigeria has the highest value.
+
+    \hypertarget{investigation-of-spatial-correlation}{%
+\subsection{Investigation of Spatial
+Correlation}\label{investigation-of-spatial-correlation}}
+
+    The spatial correlation can be to investigate whether or not spatial objects with similar
+values are clustered, randomly distributed or dispersed.
+Statistics relies on observations being
+independent from one another. If autocorrelation exists in a time or
+space, then this violates the fact that observations are independent
+from one another. On the other hand, it also implies that there could be
+something interesting regarding die data distribution, which may be
+interesting to investigate.
+\paragraph{}
+For this study, we will be used the local correlation. The local correlation enables us to detect Hot Spots, Cold Spots, and Spatial Outliers.
+  These types of local spatial autocorrelation describe similarities or
+dissimilarities between a specific polygon with its neighboring
+polygons. The upper left quadrant for example indicates that polygons
+with low values are surrounded by polygons with high values. The lower
+right quadrant shows polygons with high values surrounded by neighbors
+with low values. This indicates an association of dissimilar values.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{24}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{dfsjoin} \PY{o}{=} \PY{n}{gpd}\PY{o}{.}\PY{n}{sjoin}\PY{p}{(}\PY{n}{nigeria\PYZus{}local}\PY{p}{,}\PY{n}{fire\PYZus{}geo}\PY{o}{.}\PY{n}{set\PYZus{}crs}\PY{p}{(}\PY{n}{nigeria\PYZus{}local}\PY{o}{.}\PY{n}{crs}\PY{p}{)}\PY{p}{)}
+\PY{n}{dfsjoin}
+\PY{n}{y} \PY{o}{=} \PY{n}{dfsjoin}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LGA}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{n}{ascending}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\PY{n}{lga\PYZus{}index} \PY{o}{=} \PY{n}{nigeria\PYZus{}local}\PY{o}{.}\PY{n}{set\PYZus{}index}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LGA}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{lga\PYZus{}count}  \PY{o}{=} \PY{n}{dfsjoin}\PY{o}{.}\PY{n}{groupby}\PY{p}{(}\PY{n}{by}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LGA}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{[}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{LGA}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{]}\PY{o}{.}\PY{n}{count}\PY{p}{(}\PY{p}{)}
+\PY{n}{lga\PYZus{}count}\PY{o}{.}\PY{n}{rename}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LGA}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{nfires}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}\PY{p}{,}\PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\PY{n}{lga\PYZus{}merge} \PY{o}{=} \PY{n}{lga\PYZus{}index}\PY{o}{.}\PY{n}{merge}\PY{p}{(}\PY{n}{lga\PYZus{}count}\PY{p}{,}\PY{n}{how}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{left}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{left\PYZus{}index}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,} \PY{n}{right\PYZus{}index}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\PY{n}{lga\PYZus{}merge} \PY{o}{=} \PY{n}{lga\PYZus{}merge}\PY{o}{.}\PY{n}{fillna}\PY{p}{(}\PY{l+m+mf}{0.0}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{25}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{libpysal} \PY{k}{as} \PY{n+nn}{lps}
+\PY{k+kn}{from} \PY{n+nn}{spreg} \PY{k+kn}{import} \PY{n}{OLS}
+\PY{k+kn}{from} \PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{linalg} \PY{k+kn}{import} \PY{n}{inv}
+\PY{k+kn}{from} \PY{n+nn}{splot}\PY{n+nn}{.}\PY{n+nn}{libpysal} \PY{k+kn}{import} \PY{n}{plot\PYZus{}spatial\PYZus{}weights}
+\PY{k+kn}{import} \PY{n+nn}{mapclassify} \PY{k}{as} \PY{n+nn}{mc}
+\PY{k+kn}{from} \PY{n+nn}{esda}\PY{n+nn}{.}\PY{n+nn}{moran} \PY{k+kn}{import} \PY{n}{Moran}\PY{p}{,} \PY{n}{Moran\PYZus{}Local}
+\PY{k+kn}{from} \PY{n+nn}{splot}\PY{n+nn}{.}\PY{n+nn}{esda} \PY{k+kn}{import} \PY{n}{moran\PYZus{}scatterplot}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{26}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{wq}\PY{o}{=}\PY{n}{lps}\PY{o}{.}\PY{n}{weights}\PY{o}{.}\PY{n}{Queen}\PY{o}{.}\PY{n}{from\PYZus{}dataframe}\PY{p}{(}\PY{n}{lga\PYZus{}merge}\PY{p}{,} \PY{n}{geom\PYZus{}col}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{geometry}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{wq}\PY{o}{.}\PY{n}{transform} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r}\PY{l+s+s1}{\PYZsq{}}
+\PY{n}{my\PYZus{}v}\PY{o}{=}\PY{n}{fire\PYZus{}loc\PYZus{}nb}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{nfire}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{correlation}{%
+\paragraph{Correlation}\label{correlation}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{27}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{fig}\PY{p}{,} \PY{n}{ax}\PY{o}{=}\PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,}\PY{l+m+mi}{8}\PY{p}{)}\PY{p}{)}
+\PY{n}{moran\PYZus{}loc} \PY{o}{=} \PY{n}{Moran\PYZus{}Local}\PY{p}{(}\PY{n}{lga\PYZus{}merge}\PY{o}{.}\PY{n}{nfires}\PY{p}{,} \PY{n}{wq}\PY{p}{)}
+\PY{n}{moran\PYZus{}scatterplot}\PY{p}{(}\PY{n}{moran\PYZus{}loc}\PY{p}{,} \PY{n}{p}\PY{o}{=}\PY{l+m+mf}{0.05}\PY{p}{,} \PY{n}{ax}\PY{o}{=}\PY{n}{ax}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Spatial Lag}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{size}\PY{o}{=}\PY{l+m+mi}{15}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Attribute}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{size}\PY{o}{=}\PY{l+m+mi}{15}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Moran Local Scatterplot}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{size}\PY{o}{=}\PY{l+m+mi}{17}\PY{p}{,} \PY{n}{weight}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bold}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{figure}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_54_0.png}
+    \caption{Moral Local Scatterplot}
+    \end{figure}
+   These types of local spatial autocorrelation describe similarities or dissimilarities between a specific polygon with its neighboring polygons. The upper left quadrant for example indicates that polygons with low values are surrounded by polygons with high values (LH). The lower right quadrant shows polygons with high values surrounded by neighbors with low values (HL). This indicates an association of dissimilar values. The next figure will give more detail.\\
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{28}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{from} \PY{n+nn}{splot}\PY{n+nn}{.}\PY{n+nn}{esda} \PY{k+kn}{import} \PY{n}{lisa\PYZus{}cluster}
+\PY{c+c1}{\PYZsh{}\PYZsh{} We can see which polygon care similar in term of the value of the variable chosen.}
+\PY{c+c1}{\PYZsh{}\PYZsh{} High High, Low Low,...}
+\PY{n}{fig}\PY{p}{,} \PY{n}{ax}\PY{o}{=}\PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{12}\PY{p}{,}\PY{l+m+mi}{8}\PY{p}{)}\PY{p}{)}
+\PY{n}{lisa\PYZus{}cluster}\PY{p}{(}\PY{n}{moran\PYZus{}loc}\PY{p}{,} \PY{n}{lga\PYZus{}merge}\PY{p}{,} \PY{n}{p}\PY{o}{=}\PY{l+m+mf}{0.05}\PY{p}{,} \PY{n}{ax}\PY{o}{=}\PY{n}{ax}\PY{p}{)}
+\PY{n}{contextily}\PY{o}{.}\PY{n}{add\PYZus{}basemap}\PY{p}{(}\PY{n}{ax}\PY{p}{,} \PY{n}{crs}\PY{o}{=}\PY{n}{nigeria}\PY{o}{.}\PY{n}{crs}\PY{p}{,}
+    \PY{n}{source}\PY{o}{=}\PY{n}{contextily}\PY{o}{.}\PY{n}{providers}\PY{o}{.}\PY{n}{OpenStreetMap}\PY{o}{.}\PY{n}{Mapnik}\PY{p}{)}
+
+\PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Different type of correlation}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{size}\PY{o}{=}\PY{l+m+mi}{17}\PY{p}{,} \PY{n}{weight}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bold}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{figure}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_56_0.png}
+    \caption{Differnt types of correation}
+    \end{figure}
+
+    
+    The blue color in the figure shows the area  with low values surrounded by area with high number of fires(LH). These regions are located in the noth and south par of the country. The red color is the area high surrouned with neighbor with high value of number of fire. The LL stands for the area with low value of number of fire surrouned by area with low value of number of fire. \\
+    We can see the center part of the country which are not significant.
+    
+\hypertarget{exercise-2}{%
+\section{Exercise 2}\label{exercise-2}}
+   
+    \hypertarget{spline-interpolation}{%
+\subsection{Choice of spatial interpolation technique to create continuous elevation raster}\label{spline-interpolation}}
+Spatial interpolation is a technique exploring values of samples at known geographical locations
+(points, areas units) to estimate values at further, unknown geographical
+locations (points, area units). There are many interpolation tools available, but these tools can usually be grouped into two categories: 
+	
+	
+\begin{itemize}
+  \item deterministic: using mathematical functions, based on either the extent of similarity (IDW) or the degree of smoothing (RBF)
+  \item geostatistical: use both mathematical and statistical methods to predict values at all locations within region of interest and to provide probabilistic estimates of the quality of the interpolation based on the spatial autocorrelation among data points
+\end{itemize}
+
+For this exercise, we will be used a geostistical method to interpolate. The method is spline interpolation.
+    	
+	In mathematics, a spline is a special function defined piecewise by polynomials. In interpolating problems, spline interpolation is often preferred to polynomial interpolation because it yields similar results, even when using low degree polynomials, while avoiding Runge's phenomenon for higher degrees.\cite{spline}
+
+This method is best suited for generating smoothly changing surfaces susch as the elevation (the case of this study). 
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{29}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{geopandas} \PY{k}{as} \PY{n+nn}{gpd}
+\PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
+\PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+\PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
+\PY{k+kn}{import} \PY{n+nn}{cartopy}\PY{n+nn}{.}\PY{n+nn}{crs} \PY{k}{as} \PY{n+nn}{ccrs}
+\PY{k+kn}{import} \PY{n+nn}{verde} \PY{k}{as} \PY{n+nn}{vd}
+\PY{k+kn}{import} \PY{n+nn}{cartopy}
+\PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+\PY{k+kn}{import} \PY{n+nn}{rioxarray}
+\PY{k+kn}{import} \PY{n+nn}{rasterio}
+\PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+\PY{k+kn}{from} \PY{n+nn}{rasterio}\PY{n+nn}{.}\PY{n+nn}{plot} \PY{k+kn}{import} \PY{n}{show}
+\PY{k+kn}{from} \PY{n+nn}{shapely}\PY{n+nn}{.}\PY{n+nn}{geometry} \PY{k+kn}{import} \PY{n}{mapping}
+\PY{k+kn}{import} \PY{n+nn}{json}
+\PY{k+kn}{import} \PY{n+nn}{earthpy} \PY{k}{as} \PY{n+nn}{et}
+\PY{k+kn}{import} \PY{n+nn}{earthpy}\PY{n+nn}{.}\PY{n+nn}{plot} \PY{k}{as} \PY{n+nn}{ep}
+\PY{k+kn}{import} \PY{n+nn}{earthpy}\PY{n+nn}{.}\PY{n+nn}{spatial} \PY{k}{as} \PY{n+nn}{es}
+\PY{k+kn}{import} \PY{n+nn}{cartopy} \PY{k}{as} \PY{n+nn}{cp}
+\PY{k+kn}{import} \PY{n+nn}{seaborn} \PY{k}{as} \PY{n+nn}{sns}
+\PY{k+kn}{import} \PY{n+nn}{xarray}
+\end{Verbatim}
+\end{tcolorbox}
+
+\pagebreak 
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{30}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{eleve}\PY{o}{=}\PY{n}{gpd}\PY{o}{.}\PY{n}{read\PYZus{}file}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{../../SDA\PYZus{}Project\PYZus{}Files/Burkina/bfa\PYZus{}elevation.shp}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{world} \PY{o}{=} \PY{n}{gpd}\PY{o}{.}\PY{n}{read\PYZus{}file}\PY{p}{(}
+    \PY{n}{gpd}\PY{o}{.}\PY{n}{datasets}\PY{o}{.}\PY{n}{get\PYZus{}path}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{naturalearth\PYZus{}lowres}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{p}{)}
+\PY{n}{region}\PY{o}{=}\PY{n}{world}\PY{p}{[}\PY{n}{world}\PY{o}{.}\PY{n}{name}\PY{o}{==}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Burkina Faso}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+
+\PY{n}{eleve}\PY{o}{=}\PY{n}{eleve}\PY{o}{.}\PY{n}{to\PYZus{}crs}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{epsg:4326}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{31}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{coordinates} \PY{o}{=} \PY{p}{(}\PY{n}{eleve}\PY{o}{.}\PY{n}{geometry}\PY{o}{.}\PY{n}{x}\PY{o}{.}\PY{n}{values}\PY{p}{,} \PY{n}{eleve}\PY{o}{.}\PY{n}{geometry}\PY{o}{.}\PY{n}{y}\PY{o}{.}\PY{n}{values}\PY{p}{)}
+\PY{n}{spline} \PY{o}{=} \PY{n}{vd}\PY{o}{.}\PY{n}{Spline}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{coordinates}\PY{p}{,} \PY{n}{eleve}\PY{o}{.}\PY{n}{SRTM30mBur}\PY{p}{)}
+\PY{n}{grid\PYZus{}spline} \PY{o}{=} \PY{n}{spline}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{n}{spacing}\PY{o}{=}\PY{l+m+mf}{0.02}\PY{p}{,} \PY{n}{dims}\PY{o}{=}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{latitude}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{longitude}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)}
+\PY{n}{grid\PYZus{}spline}\PY{o}{=}\PY{n}{grid\PYZus{}spline}\PY{o}{.}\PY{n}{rio}\PY{o}{.}\PY{n}{write\PYZus{}crs}\PY{p}{(}\PY{n}{region}\PY{o}{.}\PY{n}{crs}\PY{p}{)}
+\PY{n}{spline\PYZus{}cliped}\PY{o}{=}\PY{n}{grid\PYZus{}spline}\PY{o}{.}\PY{n}{rio}\PY{o}{.}\PY{n}{clip}\PY{p}{(}\PY{n}{region}\PY{o}{.}\PY{n}{geometry}\PY{o}{.}\PY{n}{apply}\PY{p}{(}\PY{n}{mapping}\PY{p}{)}\PY{p}{,} \PY{n}{region}\PY{o}{.}\PY{n}{crs}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{32}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{fig}\PY{p}{,} \PY{n}{ax}\PY{o}{=}\PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{12}\PY{p}{,}\PY{l+m+mi}{8}\PY{p}{)}\PY{p}{)}
+\PY{n}{spline\PYZus{}cliped}\PY{o}{.}\PY{n}{scalars}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{ax}\PY{o}{=}\PY{n}{ax}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Spline Interpolation : The Shuttle Radar Topography Mission (SRTM30mBur)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{size}\PY{o}{=}\PY{l+m+mi}{15}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{figure}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_65_0.png}
+    \caption{Spline interpolation : Continuous elevation raster}
+    \end{figure}
+ 
+    \begin{itemize}
+\tightlist
+\item
+  The reason of the choice of spline interpolation
+\end{itemize}
+	
+	The spline method is geostatiscal method of interpolation. It works  like the trend surface. It is similare to a rubber dis passing through the points, which is bent while
+the overall curvature of the surface is minimized. This method works with the data we have. \\
+Then, the accuracy of the output of the spline mehtod is also
+very important. Let's compute the \begin{math} R^{2} \end{math}  function.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{33}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{train}\PY{p}{,} \PY{n}{test} \PY{o}{=} \PY{n}{vd}\PY{o}{.}\PY{n}{train\PYZus{}test\PYZus{}split}\PY{p}{(}
+    \PY{n}{coordinates}\PY{p}{,} \PY{n}{eleve}\PY{o}{.}\PY{n}{SRTM30mBur}\PY{p}{,} \PY{n}{test\PYZus{}size}\PY{o}{=}\PY{l+m+mf}{0.2}\PY{p}{,} \PY{n}{random\PYZus{}state}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,}
+\PY{p}{)}
+
+\PY{n}{spline} \PY{o}{=} \PY{n}{vd}\PY{o}{.}\PY{n}{Spline}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{o}{*}\PY{n}{train}\PY{p}{)}
+
+\PY{n}{test\PYZus{}values} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{n+nb}{list}\PY{p}{(}\PY{n}{test}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+\PY{n}{prediction} \PY{o}{=} \PY{n}{spline}\PY{o}{.}\PY{n}{predict}\PY{p}{(}\PY{n}{test}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+
+\PY{n}{df} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{obs}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n}{test\PYZus{}values}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{pred}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n}{prediction}\PY{p}{\PYZcb{}}\PY{p}{)}
+\PY{n}{correlation\PYZus{}matrix} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{corrcoef}\PY{p}{(}\PY{n}{test\PYZus{}values}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{prediction}\PY{p}{)}
+\PY{n}{correlation\PYZus{}xy} \PY{o}{=} \PY{n}{correlation\PYZus{}matrix}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}
+\PY{n}{r\PYZus{}squared} \PY{o}{=} \PY{n}{correlation\PYZus{}xy}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{34}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{p} \PY{o}{=} \PY{n}{sns}\PY{o}{.}\PY{n}{lmplot}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{obs}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{y}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{pred}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{n}{data}\PY{o}{=}\PY{n}{df}\PY{p}{,}
+        \PY{n}{line\PYZus{}kws}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{label}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Linear Reg}\PY{l+s+s2}{\PYZdq{}}\PY{p}{\PYZcb{}}\PY{p}{,} \PY{n}{legend}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+
+\PY{n}{ax} \PY{o}{=} \PY{n}{p}\PY{o}{.}\PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{]}
+\PY{n}{ax}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+\PY{n}{leg} \PY{o}{=} \PY{n}{ax}\PY{o}{.}\PY{n}{get\PYZus{}legend}\PY{p}{(}\PY{p}{)}
+\PY{n}{L\PYZus{}labels} \PY{o}{=} \PY{n}{leg}\PY{o}{.}\PY{n}{get\PYZus{}texts}\PY{p}{(}\PY{p}{)}
+\PY{n}{label\PYZus{}line\PYZus{}2} \PY{o}{=} \PY{l+s+sa}{r}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZdl{}R\PYZca{}2:}\PY{l+s+si}{\PYZob{}0:.2f\PYZcb{}}\PY{l+s+s1}{\PYZdl{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{r\PYZus{}squared}\PY{p}{)} 
+\PY{n}{L\PYZus{}labels}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}text}\PY{p}{(}\PY{n}{label\PYZus{}line\PYZus{}2}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{R2}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{savefig}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{raster/r2}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n+nb}{format}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{svg}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{figure}
+    
+    \adjustimage{max size={0.6\linewidth}{0.6\paperheight}}{output_68_0.png}
+    \caption{Accuracy of spline interpolation  }
+    \end{figure}
+    
+    We can seee the value of \begin{math} R^{2} \end{math} is 0.86. This means the output is accurate
+at 86\%.
+
+    \hypertarget{show-maps-for-both-rasters-and-compare-your-created-continuous-elevation-raster-with-the-srtm-digital-elevation-model-for-burkina-faso.-what-do-you-observe-where-are-the-differences}{%
+\subsection{Comparison of the created continuous elevation raster with the SRMT Digital Elevation Model for Burkina Faso.
+}\label{show-maps-for-both-rasters-and-compare-your-created-continuous-elevation-raster-with-the-srtm-digital-elevation-model-for-burkina-faso.-what-do-you-observe-where-are-the-differences}}
+\begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{my\PYZus{}raster}\PY{o}{=}\PY{n}{rasterio}\PY{o}{.}\PY{n}{open}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{../../SDA\PYZus{}Project\PYZus{}Files/Burkina/bfa\PYZus{}srtm.tif}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{f}\PY{p}{,} \PY{n}{ax}\PY{o}{=}\PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{16}\PY{p}{,}\PY{l+m+mi}{6}\PY{p}{)}\PY{p}{,} \PY{n}{gridspec\PYZus{}kw}\PY{o}{=}\PY{n+nb}{dict}\PY{p}{(}\PY{n}{width\PYZus{}ratios}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{7}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\PY{c+c1}{\PYZsh{}cbar = plt.colorbar()}
+\PY{n}{spline\PYZus{}cliped}\PY{o}{.}\PY{n}{scalars}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{ax}\PY{o}{=}\PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+\PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Spline Interpolation : Continuous elevation raster}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{size}\PY{o}{=}\PY{l+m+mi}{17}\PY{p}{)}
+\PY{n}{im}\PY{o}{=}\PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{imshow}\PY{p}{(}\PY{n}{my\PYZus{}raster}\PY{o}{.}\PY{n}{read}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
+\PY{n}{ax}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{SRMT Digital Elevation Model for Burkina Faso}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{size}\PY{o}{=}\PY{l+m+mi}{17}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{colorbar}\PY{p}{(}\PY{n}{im}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+\pagebreak 
+\begin{figure}[!htb]
+   \begin{minipage}{1\textwidth}
+     \centering
+     \includegraphics[width=1\linewidth]{output_65_0.png}
+     \caption{Raster fron spline interpolation}\label{Fig:Data1}
+   \end{minipage}\hfill
+   \begin{minipage}{1\textwidth}
+     \centering
+     \includegraphics[width=1\linewidth]{output_72_1.png}
+     \caption{SRMT Digital Elevation Model}\label{Fig:Data2}
+   \end{minipage}
+\end{figure}
+
+
+  
+   
+    
+    We can see from the two plots that the values are similar. But even they
+are similar, we can notice some differences between the rasters object.
+The Shuttle Radar Topography Mission (SRTM) digital elevation dataset was originally produced to provide consistent, high-quality elevation data at near global scope.\cite{srmt} \\
+In fact, interpolation continuous value are in the range of 0 and 700 of SRTM30mBur. Wheras, the value of the SRTMT Digital Elevation Model are out of the range 0 and 700. Also we can notice the higher quality of the raster from the SRMT Digital Model. 
+
+
+    % Add a bibliography block to the postdoc
+    \newpage
+\begin{thebibliography}{9}
+  	\bibitem{spation_interpolation}
+  	\url {https://rspatial.org/raster/analysis/}
+  	\bibitem{spatial_interpolation2} 
+  		\url{https://mgimond.github.io/Spatial/introGIS.html}
+  	\bibitem{gstat2} \url {https://mgimond.github.io/Spatial/introGIS.html}
+  		
+	\bibitem{Social_social} \url{https://github.com/WZBSocialScienceCenter/geovoronoi}
+	\bibitem{sks} \url{https://github.com/rosskush/skspatial}
+	\bibitem{fiando} \url{https://github.com/fatiando/verde}
+	\bibitem{spline} \url {https://wikipedia.org/wiki/Spline_interpolation}
+	\bibitem{correlation} Spatial Autocorrelation and Statistical Tests: Some Solutions, \url{https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&ved=2ahUKEwi_-6O79enwAhVZShUIHYO4DC4QFjAAegQIAhAD&url=https%3A%2F%2Fwww.jstor.org%2Fstable%2F20696567&usg=AOvVaw0oJPUCAXSuwaNUccih85Q-}
+	\bibitem{srmt} \url {https://developers.google.com/earth-engine/datasets/catalog/CGIAR_SRTM90_V4}
+\end{thebibliography}
+    
+    
+    
+\end{document}
